@@ -1,0 +1,90 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <title>hekate Web</title>
+    <style>
+        :root { --hekate-cyan: #14f3b0; }
+        body { margin: 0; background: #0b0e12; color: white; font-family: sans-serif; overflow: hidden; height: 100vh; }
+        
+        /* Fondo animado */
+        .bg-particles { position: absolute; top:0; left:0; width: 100%; height: 100%; z-index: -1; background: radial-gradient(circle at 50% 50%, #1a2a2a 0%, #000 100%); }
+        
+        #app { display: flex; flex-direction: column; height: 100%; padding: 20px; box-sizing: border-box; }
+        
+        /* Navbar superior */
+        header { display: flex; justify-content: space-between; border-bottom: 1px solid #333; padding-bottom: 10px; }
+        .nav-item { color: var(--hekate-cyan); cursor: pointer; }
+
+        /* Contenedor central */
+        .content { flex-grow: 1; display: flex; align-items: center; justify-content: center; gap: 20px; }
+        .card { width: 180px; height: 200px; background: rgba(255,255,255,0.05); border: 1px solid #444; display: flex; flex-direction: column; align-items: center; justify-content: center; cursor: pointer; transition: 0.3s; }
+        .card:hover { border-color: var(--hekate-cyan); background: rgba(20, 243, 176, 0.1); }
+        .icon { font-size: 50px; color: var(--hekate-cyan); margin-bottom: 10px; }
+
+        /* Pantallas ocultas */
+        .screen { display: none; }
+        .active { display: flex; }
+
+        footer { display: flex; justify-content: space-between; border-top: 1px solid #333; padding-top: 10px; font-size: 0.8em; }
+    </style>
+</head>
+<body>
+
+<div class="bg-particles"></div>
+
+<div id="app">
+    <header>
+        <div>hekate v5.0.0</div>
+        <div style="display:flex; gap:20px;">
+            <span class="nav-item">Home</span><span>Tools</span><span>Console Info</span><span>Options</span>
+        </div>
+    </header>
+
+    <div id="main" class="content screen active">
+        <div class="card" onclick="go('launch')"><div class="icon">➤</div>Launch</div>
+        <div class="card"><div>☰</div>More Configs</div>
+        <div class="card"><div>▤</div>Payloads</div>
+        <div class="card"><div>⚛</div>emuMMC</div>
+    </div>
+
+    <div id="launch" class="content screen">
+        <div class="card" onclick="runAndroid()"><div>🤖</div>Android (LineageOS)</div>
+        <div class="card" onclick="go('main')"><div>«</div>Back</div>
+    </div>
+
+    <div id="console" class="screen" style="flex-direction: column; align-items: center; justify-content: center; height: 100%;">
+        <pre id="log" style="color: var(--hekate-cyan);"></pre>
+    </div>
+
+    <footer>
+        <div>15:18 | 29.1°C</div>
+        <div>+46 mA | 94.3% [⚡]</div>
+    </footer>
+</div>
+
+<script>
+    function go(id) {
+        document.querySelectorAll('.screen').forEach(s => s.classList.remove('active'));
+        document.getElementById(id).classList.add('active');
+    }
+
+    function runAndroid() {
+        go('console');
+        const log = document.getElementById('log');
+        log.innerHTML = ""; // Limpiar antes de empezar
+        const lines = ["Loading boot.img...", "Mounting /system...", "Starting LineageOS 20...", "Initializing HAL...", "Boot complete."];
+        let i = 0;
+        const interval = setInterval(() => {
+            log.innerHTML += lines[i] + "\n";
+            i++;
+            if(i >= lines.length) clearInterval(interval);
+        }, 800);
+    }
+</script>
+
+</body>
+</html>
+
+
+
